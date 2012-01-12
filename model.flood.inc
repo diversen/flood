@@ -20,14 +20,14 @@ class flood {
      */
     public static function check () {
         
-        if (get_main_ini('debug')) {
+        if (config::getMainIni('debug')) {
             self::$log = true;
         }
         
         $db = new db();
         $user_id = session::getUserId();
         $search = array ('user_id' =>  $user_id);
-        $post_max = get_module_ini('flood_post_max');
+        $post_max = config::getModuleIni('flood_post_max');
         $row = $db->selectOne(self::$table, null, $search);
         
         // no user in db
@@ -76,7 +76,7 @@ class flood {
      * @return boolean $res true if exceeds else false
      */
     public static function exceedsInterval ($updated) {
-        $interval = get_module_ini('flood_post_interval');
+        $interval = config::getModuleIni('flood_post_interval');
         $max = strtotime($updated) + $interval; 
 
         if ( $max > time() ) {

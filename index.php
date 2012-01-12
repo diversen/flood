@@ -3,9 +3,9 @@
 include_once "timeanddate.php";
 
 $row = flood::getUserRow();
-$max_posts = get_module_ini('flood_post_max');
+$max_posts = config::getModuleIni('flood_post_max');
 
-$interval = get_module_ini('flood_post_interval');
+$interval = config::getModuleIni('flood_post_interval');
 $post_next = strtotime($row['updated']) + $interval; 
 //return;
 $time_to_next_post = $post_next - time();
