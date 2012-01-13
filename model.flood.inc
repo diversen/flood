@@ -45,7 +45,7 @@ class flood {
                 // And exceed timelimit. Redirect to error
                 if (self::exceedsInterval($row['updated'])) {
                     if (self::$log) cos_error_log ('Exceeds time');
-                    send_location_header('/flood/index');
+                    http::locationHeader('/flood/index');
                 } else {
                     // Out of timelimit: reset posts
                     $values['updated'] = date('Y-m-d H:i:s');
