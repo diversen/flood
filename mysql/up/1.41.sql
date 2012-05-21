@@ -3,5 +3,7 @@ CREATE TABLE IF NOT EXISTS flood (
     user_id int(10),
     posts int(10) DEFAULT '0',
     updated timestamp,
-    INDEX (user_id)
+    reference varchar (32)
 );
+
+CREATE INDEX `idx_flood` ON flood(`user_id`, `reference`);
