@@ -19,15 +19,18 @@ class flood {
      * method for checking 
      */
     public static function events ($args) {
-        
+
         if (config::getMainIni('debug')) {
             self::$log = true;
         }
         
+        // check if it is something we are configured to do
+        $ini = self::getIniSection($args);
+        if (empty($ini)) return;
+        
         $db = new db();
         $row = self::getUserRow($args['action']);
-        //print_r($row); die;
-        $ini = self::getIniSection($args);
+        
         
         $post_max = $ini['post_max'];
         $values = array();
@@ -37,10 +40,7 @@ class flood {
             $values['user_id'] = session::getUserId();
             $values['reference'] = $args['action'];
             $values['posts'] = 1;
-            $res = $db->insert(self::$table, $values);
-            //die($res);
-            //return $res;
-        // found a row    
+            $res = $db->insert(self::$table, $values); 
         } else {
             // Exceed max posts
             if ($row['posts'] >= $post_max) {
@@ -71,13 +71,21 @@ class flood {
                 $res = $db->update(self::$table, $row, $row['id']);
             }
         }
+        
         return $res;
     }
     
+    /**
+     * gets a ini section, e.g. for comment_create
+     * @param type $args
+     * @return type 
+     */
     public static function getIniSection ($args) {
         static $sections = array();
         
         $action = $args['action'];
+        
+        // check if the static sections[$action] is set
         if (!isset($sections[$action])) {
             $section = "flood_$action";
             $ini = config::getModuleIni($section);
@@ -94,7 +102,6 @@ class flood {
     public static function exceedsInterval ($args, $updated) {
         $ini = self::getIniSection($args);
         $interval = $ini['post_interval'];
-        //$interval = config::getModuleIni('flood_post_interval');
         $max = strtotime($updated) + $interval; 
 
         if ( $max > time() ) {
@@ -103,21 +110,17 @@ class flood {
         return false;
     }
     
+
     /**
-     * 
-     * @param type $args 
+     * return a user row from reference
+     * @param string $reference e.g. comment_create
+     * @return array $row
      */
-    /*
-    public static function events ($args = null) {
-        self::check($args);
-    }*/
-    
     public static function getUserRow ($reference) {
         $db = new db();
         $search = array (
             'user_id' =>  session::getUserId(), 
             'reference' => $reference);
-        //print_r($search); die;
         $row = $db->selectOne(self::$table, null, $search);
         return $row;
     }

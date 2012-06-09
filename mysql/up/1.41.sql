@@ -4,6 +4,6 @@ CREATE TABLE IF NOT EXISTS flood (
     posts int(10) DEFAULT '0',
     updated timestamp,
     reference varchar (32)
-);
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 CREATE INDEX `idx_flood` ON flood(`user_id`, `reference`);
