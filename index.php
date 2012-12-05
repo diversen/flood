@@ -21,4 +21,4 @@ $res = time::getSecsDivided($time_to_next_post);
 //print_r($row );
 
 echo "Max Amount of posts is $max_posts per $interval secs\n";
-echo "Your post counter will be reset in $res[minutes] and $res[seconds]";
+echo "Your post counter will be reset in $res[minutes] minutes and $res[seconds] seconds";
