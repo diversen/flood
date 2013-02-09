@@ -46,15 +46,15 @@ class flood {
             if ($row['posts'] >= $post_max) {
                 // And exceed timelimit. Redirect to error
                 if (self::exceedsInterval($args, $row['updated'])) {
-                    if (self::$log) cos_error_log ('Exceeds time');
+                    if (self::$log) log::error ('Exceeds time');
                     http::locationHeader("/flood/index?action=$args[action]");
                 } else {
                     // Out of timelimit: reset posts
                     $values['updated'] = date('Y-m-d H:i:s');
                     $values['posts'] = 1;
                     if (self::$log) {
-                        cos_error_log('update db: with values');
-                        cos_error_log(var_export ($values, true));
+                        log::error('update db: with values');
+                        log::error(var_export ($values, true));
                     }
                     $res = $db->update(self::$table, $values, $row['id']);
                     
@@ -64,8 +64,8 @@ class flood {
                 $values['updated'] = date('Y-m-d H:i:s');
                 
                 if (self::$log) {
-                    cos_error_log('update db: with values');
-                    cos_error_log(var_export ($values, true));
+                    log::error('update db: with values');
+                    log::error(var_export ($values, true));
                 }
                 
                 $res = $db->update(self::$table, $row, $row['id']);
