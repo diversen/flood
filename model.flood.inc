@@ -19,7 +19,7 @@ class flood {
      * method for checking 
      */
     public static function events ($args) {
-
+        
         if (config::getMainIni('debug')) {
             self::$log = true;
         }
@@ -46,7 +46,9 @@ class flood {
             if ($row['posts'] >= $post_max) {
                 // And exceed timelimit. Redirect to error
                 if (self::exceedsInterval($args, $row['updated'])) {
-                    if (self::$log) log::error ('Exceeds time');
+                    if (self::$log) { 
+                        log::debug('Flood: Exceeds time');
+                    }
                     http::locationHeader("/flood/index?action=$args[action]");
                 } else {
                     // Out of timelimit: reset posts
@@ -64,8 +66,8 @@ class flood {
                 $values['updated'] = date('Y-m-d H:i:s');
                 
                 if (self::$log) {
-                    log::error('update db: with values');
-                    log::error(var_export ($values, true));
+                    log::debug('update db: with values');
+                    log::debug($values);
                 }
                 
                 $res = $db->update(self::$table, $row, $row['id']);
