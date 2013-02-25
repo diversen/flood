@@ -14,3 +14,7 @@ $_COS_LANG_MODULE['flood: minutes and'] = ' minute(s) and ';
 $_COS_LANG_MODULE['flood: seconds'] = ' second(s)';
 
 
+
+$_COS_LANG_MODULE['flood: hours and'] = ' hour(s) and ';
+
+$_COS_LANG_MODULE['flood: days and'] = ' day(s) and ';
