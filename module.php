@@ -24,13 +24,15 @@ class flood {
             self::$log = true;
         }
         
+        
+        
         // check if it is something we are configured to do
         $ini = self::getIniSection($args);
+        
         if (empty($ini)) return;
         
         $db = new db();
         $row = self::getUserRow($args['action']);
-        
         
         $post_max = $ini['post_max'];
         $values = array();
@@ -40,9 +42,11 @@ class flood {
             $values['user_id'] = session::getUserId();
             $values['reference'] = $args['action'];
             $values['posts'] = 1;
+            
             $res = $db->insert(self::$table, $values); 
         } else {
             // Exceed max posts
+            
             if ($row['posts'] >= $post_max) {
                 // And exceed timelimit. Redirect to error
                 if (self::exceedsInterval($args, $row['updated'])) {
@@ -62,9 +66,9 @@ class flood {
                     
                 }               
             } else {
+                        
                 $values['posts'] = $row['posts']++;               
                 $values['updated'] = date('Y-m-d H:i:s');
-                
                 if (self::$log) {
                     log::debug('update db: with values');
                     log::debug($values);
