@@ -8,5 +8,5 @@ $_COS_LANG_MODULE['flood: per'] = 'kohti';
 $_COS_LANG_MODULE['flood: Your post counter will be reset in'] = 'Voit lähettää uudelleen';
 $_COS_LANG_MODULE['flood: minutes and'] = 'minuutti (a) ja';
 $_COS_LANG_MODULE['flood: seconds'] = 'toinen (s)';
-$_COS_LANG_MODULE['flood: days and'] = 'päivä (s) ja';
 $_COS_LANG_MODULE['flood: hours and'] = 'tunti (a) ja';
+$_COS_LANG_MODULE['flood: days and'] = 'päivä (s) ja';
