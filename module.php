@@ -16,20 +16,19 @@ class flood {
     public static $log = null;
     
     /**
-     * method for checking 
+     * method for checking if something if being flooded,
      */
     public static function events ($args) {
         
         if (config::getMainIni('debug')) {
             self::$log = true;
         }
-        
-        
-        
+                
         // check if it is something we are configured to do
         $ini = self::getIniSection($args);
-        
-        if (empty($ini)) return;
+        if (empty($ini)) { 
+            return;
+        }
         
         $db = new db();
         $row = self::getUserRow($args['action']);
