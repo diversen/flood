@@ -1,8 +1,10 @@
 <?php
 
+
 $reference = htmlspecialchars($_GET['action']);
 $row = flood::getUserRow($reference);
-$ini = flood::getIniSection($ary = array ('action' => $reference));
+
+$ini = flood::getIniSection($reference);
 
 $max_posts = $ini['post_max'];
 

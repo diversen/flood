@@ -16,34 +16,56 @@ class flood {
     public static $log = null;
     
     /**
-     * method for checking if something if being flooded,
+     * method for checking if something if being flooded with events,
+     * if is performed on action, e.g. 'comment_create'
+     * then: whenever a comment is created we examine the ini settings for 
+     * comment_create which will look like this:
+     *  
+     * ; flood.ini from default profile
+     * ; max posts
+     * flood_comment_create[post_max] = "3"
+     * ; in secs 
+     * flood_comment_create[post_interval] = "86400"
+     * 
+     * Then with a user_id and a timestamp we know if a user has posted 
+     * to 
+     * 
      */
     public static function events ($args) {
+        return self::performFloodCheck($args['action']);
+    }
+    
+    /**
+     * performs flood check based on action, see above method for explanation
+     * @param string $action
+     * @return boolean $res true on success else failure
+     */
+    public static function performFloodCheck($action) {
 
         if (config::getMainIni('debug')) {
             self::$log = true;
         }
                 
         // check if it is something we are configured to do
-        $ini = self::getIniSection($args);
+        $ini = self::getIniSection($action);
         if (empty($ini)) { 
             return;
         }
 
-        $row = self::getUserRow($args['action']);
+        $row = self::getUserRow($action);
         
         $post_max = $ini['post_max'];
         $res = null;
         
         if (empty($row)) {
-            $res = self::insertFirstRow($args['action']);
+            $res = self::insertFirstRow($action);
         } else {
             
             // Exceed max posts            
             if ($row['posts'] >= $post_max) {
                 // And exceed timelimit. Redirect to error
-                if (self::exceedsInterval($args, $row['updated'])) {
-                    self::redirect($args['action']);
+                if (self::exceedsInterval($action, $row['updated'])) {
+                    self::redirect($action);
                 } else {
                     $res = self::resetPosts($row);    
                 }
@@ -92,11 +114,11 @@ class flood {
      *                          about what went wrong. And when user can perform 
      *                          action again)
      */
-    public static function redirect($redirect) {
+    public static function redirect($action) {
         if (self::$log) {
             log::debug('Flood: Exceeds time');
         }
-        http::locationHeader("/flood/index?action=$redirect");
+        http::locationHeader("/flood/index?action=$action");
     }
     
     /**
@@ -122,11 +144,9 @@ class flood {
      * @param type $args
      * @return type 
      */
-    public static function getIniSection ($args) {
+    public static function getIniSection ($action) {
         static $sections = array();
-        
-        $action = $args['action'];
-        
+
         // check if the static sections[$action] is set
         if (!isset($sections[$action])) {
             $section = "flood_$action";
@@ -141,8 +161,8 @@ class flood {
      * @param string $updated sql timestamp (Y-m-d H:i:s)
      * @return boolean $res true if exceeds else false
      */
-    public static function exceedsInterval ($args, $updated) {
-        $ini = self::getIniSection($args);
+    public static function exceedsInterval ($action, $updated) {
+        $ini = self::getIniSection($action);
         $interval = $ini['post_interval'];
         $max = strtotime($updated) + $interval; 
 
