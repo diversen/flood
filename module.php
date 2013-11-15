@@ -186,4 +186,48 @@ class flood {
         $row = $db->selectOne(self::$table, null, $search);
         return $row;
     }
+    
+    public static function getFloodedMessage($action) {
+        $row = flood::getUserRow($action);
+        $ini = flood::getIniSection($action);
+        $max_posts = $ini['post_max'];
+
+        $interval = $ini['post_interval'];
+        $post_next = strtotime($row['updated']) + $interval;
+
+        $time_to_next_post = $post_next - time();
+        if ($time_to_next_post < 0) {
+            html::headline(lang::translate('flood: You can post agian'));
+            echo lang::translate('flood: You should be able to post');
+            return;
+        }
+
+        $res = time::getSecsDivided($time_to_next_post);
+        $str = html::getHeadline(lang::translate('flood:: exceed time limit title'));
+        $res_int = time::getSecsDivided($interval);
+
+        $str.= lang::translate('flood: Max Amount of posts is');
+        $str.= $max_posts;
+        $str.= lang::translate('flood: per');
+
+        $str.= $res_int['days'];
+        $str.= lang::translate('flood: days and');
+        $str.= $res_int['hours'];
+        $str.= lang::translate('flood: hours and');
+        $str.= $res_int['minutes'];
+        $str.= lang::translate('flood: minutes and');
+        $str.= $res_int['seconds'];
+        $str.= lang::translate('flood: seconds');
+
+        $str.= "<br />\n";
+
+        $str.= lang::translate('flood: Your post counter will be reset in');
+        $str.= $res['hours'];
+        $str.= lang::translate('flood: hours and');
+        $str.= $res['minutes'];
+        $str.= lang::translate('flood: minutes and');
+        $str.= $res['seconds'];
+        $str.= lang::translate('flood: seconds');
+        return $str;
+    }
 }
