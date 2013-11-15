@@ -19,7 +19,7 @@ class flood {
      * method for checking if something if being flooded,
      */
     public static function events ($args) {
-        
+
         if (config::getMainIni('debug')) {
             self::$log = true;
         }
@@ -29,57 +29,94 @@ class flood {
         if (empty($ini)) { 
             return;
         }
-        
-        $db = new db();
+
         $row = self::getUserRow($args['action']);
         
         $post_max = $ini['post_max'];
-        $values = array();
         $res = null;
+        
         if (empty($row)) {
-            // first row
-            $values['user_id'] = session::getUserId();
-            $values['reference'] = $args['action'];
-            $values['posts'] = 1;
-            
-            $res = $db->insert(self::$table, $values); 
+            $res = self::insertFirstRow($args['action']);
         } else {
-            // Exceed max posts
             
+            // Exceed max posts            
             if ($row['posts'] >= $post_max) {
                 // And exceed timelimit. Redirect to error
                 if (self::exceedsInterval($args, $row['updated'])) {
-                    if (self::$log) { 
-                        log::debug('Flood: Exceeds time');
-                    }
-                    http::locationHeader("/flood/index?action=$args[action]");
+                    self::redirect($args['action']);
                 } else {
-                    // Out of timelimit: reset posts
-                    $values['updated'] = date('Y-m-d H:i:s');
-                    $values['posts'] = 1;
-                    if (self::$log) {
-                        log::error('update db: with values');
-                        log::error(var_export ($values, true));
-                    }
-                    $res = $db->update(self::$table, $values, $row['id']);
-                    
-                }               
-            } else {
-                        
-                $values['posts'] = $row['posts']++;               
-                $values['updated'] = date('Y-m-d H:i:s');
-                if (self::$log) {
-                    log::debug('update db: with values');
-                    log::debug($values);
+                    $res = self::resetPosts($row);    
                 }
                 
-                $res = $db->update(self::$table, $row, $row['id']);
+            // increment posts
+            } else {
+                $res = self::incrementRow($row);
             }
         }
-        
         return $res;
     }
     
+    /**
+     * increment a user row
+     * @param array $row
+     * @return boolean $res result from db
+     */
+    public static function incrementRow($row) {
+        $db = new db();
+        $row['posts']++;
+        $row['updated'] = date('Y-m-d H:i:s');
+        if (self::$log) {
+            log::debug('update db: with values');
+            log::debug($row);
+        }
+        return $db->update(self::$table, $row, $row['id']);
+    }
+
+    /**
+     * insert first row
+     * @param array $row
+     * @return boolean $res result from db
+     */
+    public static function insertFirstRow($action) {
+        $db = new db();
+        $values = array ();
+        $values['user_id'] = session::getUserId();
+        $values['reference'] = $action;
+        $values['posts'] = 1;
+        return $db->insert(self::$table, $values);
+    }
+    
+    /**
+     * redirect to flood page if time interval has been exceeded
+     * @param string $redirect (containing the action in order to fetch info 
+     *                          about what went wrong. And when user can perform 
+     *                          action again)
+     */
+    public static function redirect($redirect) {
+        if (self::$log) {
+            log::debug('Flood: Exceeds time');
+        }
+        http::locationHeader("/flood/index?action=$redirect");
+    }
+    
+    /**
+     * reset posts to 1
+     * @param type $row
+     * @return boolean $res result from db
+     */
+    public static function resetPosts($row) {
+        // Out of timelimit: reset posts
+        $db = new db();
+        $values = array ();
+        $values['updated'] = date('Y-m-d H:i:s');
+        $values['posts'] = 1;
+        if (self::$log) {
+            log::error('update db: with values');
+            log::error(var_export($values, true));
+        }
+        return $db->update(self::$table, $values, $row['id']);
+    }
+
     /**
      * gets a ini section, e.g. for comment_create
      * @param type $args
