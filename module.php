@@ -40,7 +40,7 @@ class flood {
      * @param string $action
      * @return boolean $res true on success else failure
      */
-    public static function performFloodCheck($action) {
+    public static function performFloodCheck($action, $func_run = null) {
 
         if (config::getMainIni('debug')) {
             self::$log = true;
@@ -65,7 +65,11 @@ class flood {
             if ($row['posts'] >= $post_max) {
                 // And exceed timelimit. Redirect to error
                 if (self::exceedsInterval($action, $row['updated'])) {
-                    self::redirect($action);
+                    if (!$func_run) {
+                        self::redirect($action);
+                    } else {
+                        return $func_run();
+                    }
                 } else {
                     $res = self::resetPosts($row);    
                 }
