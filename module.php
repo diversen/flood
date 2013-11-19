@@ -32,15 +32,21 @@ class flood {
      * 
      */
     public static function events ($args) {
-        return self::performFloodCheck($args['action']);
+
+        $res = self::performFloodCheck($args['action']);
+        if (!$res) {
+            self::redirect($args['action']);
+        }
     }
     
     /**
-     * performs flood check based on action, see above method for explanation
+     * performs flood check based on action and increments flood table, 
+     * see above method for explanation
+     * 
      * @param string $action
      * @return boolean $res true on success else failure
      */
-    public static function performFloodCheck($action, $func_run = null) {
+    public static function performFloodCheck($action) {
 
         if (config::getMainIni('debug')) {
             self::$log = true;
@@ -49,37 +55,71 @@ class flood {
         // check if it is something we are configured to do
         $ini = self::getIniSection($action);
         if (empty($ini)) { 
-            return;
+            return true;
         }
 
         $row = self::getUserRow($action);
         
         $post_max = $ini['post_max'];
-        $res = null;
+
         
         if (empty($row)) {
-            $res = self::insertFirstRow($action);
+            self::insertFirstRow($action);
+            return true;
         } else {
             
             // Exceed max posts            
             if ($row['posts'] >= $post_max) {
-                // And exceed timelimit. Redirect to error
-                if (self::exceedsInterval($action, $row['updated'])) {
-                    if (!is_callable($func_run)) {
-                        self::redirect($action);
-                    } else {
-                        return $func_run();
-                    }
+                if (self::exceedsInterval($action, $row['updated'])) {             
+                    return false;
                 } else {
-                    $res = self::resetPosts($row);    
+                    self::resetPosts($row);
+                    return true;
                 }
                 
             // increment posts
             } else {
-                $res = self::incrementRow($row);
+                self::incrementRow($row);
+                return true;
             }
         }
-        return $res;
+    }
+    
+    /**
+     * checks if specified action is allowed to be performed
+     * @param string $action
+     * @return boolean $res true if allowed else false
+     */
+    public static function allowAction($action) {
+                
+        // check if it is something we are configured to do
+        $ini = self::getIniSection($action);
+        if (empty($ini)) { 
+            return true;
+        }
+
+        $row = self::getUserRow($action);   
+        $post_max = $ini['post_max'];
+
+        if (empty($row)) {
+            return true;
+        } else {
+            
+            // Exceed max posts            
+            if ($row['posts'] >= $post_max) {
+                
+                // And exceed timelimit. Redirect to error
+                if (self::exceedsInterval($action, $row['updated'])) {
+                    return false;
+                } else {
+                    return true;  
+                }
+                
+            // increment posts
+            } else {
+                return true;
+            }
+        }
     }
     
     /**
@@ -90,7 +130,7 @@ class flood {
     public static function incrementRow($row) {
         $db = new db();
         $row['posts']++;
-        $row['updated'] = date('Y-m-d H:i:s');
+        //$row['updated'] = date('Y-m-d H:i:s');
         if (self::$log) {
             log::debug('update db: with values');
             log::debug($row);
@@ -192,7 +232,13 @@ class flood {
     }
     
     public static function getFloodedMessage($action) {
+        
         $row = flood::getUserRow($action);
+        if (empty($row)) {
+            $row = array ();
+            $row['updated'] = date::getDateNow();
+        }
+        
         $ini = flood::getIniSection($action);
         $max_posts = $ini['post_max'];
 
