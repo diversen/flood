@@ -65,7 +65,7 @@ class flood {
             if ($row['posts'] >= $post_max) {
                 // And exceed timelimit. Redirect to error
                 if (self::exceedsInterval($action, $row['updated'])) {
-                    if (!$func_run) {
+                    if (!is_callable($func_run)) {
                         self::redirect($action);
                     } else {
                         return $func_run();
@@ -135,7 +135,7 @@ class flood {
         $db = new db();
         $values = array ();
         $values['updated'] = date('Y-m-d H:i:s');
-        $values['posts'] = 1;
+        $values['posts'] = 0;
         if (self::$log) {
             log::error('update db: with values');
             log::error(var_export($values, true));
