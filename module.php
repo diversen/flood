@@ -132,8 +132,8 @@ class flood {
         $row['posts']++;
         //$row['updated'] = date('Y-m-d H:i:s');
         if (self::$log) {
-            log::debug('update db: with values');
-            log::debug($row);
+            //log::debug('update db: with values');
+            //log::debug($row);
         }
         return $db->update(self::$table, $row, $row['id']);
     }
