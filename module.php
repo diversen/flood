@@ -32,7 +32,6 @@ class flood {
      * 
      */
     public static function events ($args) {
-
         $res = self::performFloodCheck($args['action']);
         if (!$res) {
             self::redirect($args['action']);
