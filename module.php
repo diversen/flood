@@ -90,10 +90,9 @@ class flood {
      * @return boolean $res true if allowed else false
      */
     public static function allowAction($action) {
-                
         // check if it is something we are configured to do
         $ini = self::getIniSection($action);
-        if (empty($ini)) { 
+        if (empty($ini)) {
             return true;
         }
 
@@ -101,6 +100,7 @@ class flood {
         $post_max = $ini['post_max'];
 
         if (empty($row)) {
+            
             return true;
         } else {
             
@@ -331,3 +331,5 @@ class flood {
         return $str;
     }
 }
+
+class flood_module extends flood {}
