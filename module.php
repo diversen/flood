@@ -175,10 +175,6 @@ class flood {
         $values = array ();
         $values['updated'] = date('Y-m-d H:i:s');
         $values['posts'] = 0;
-        if (self::$log) {
-            log::error('update db: with values');
-            log::error(var_export($values, true));
-        }
         return $db->update(self::$table, $values, $row['id']);
     }
 
