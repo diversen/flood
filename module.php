@@ -47,7 +47,7 @@ class flood {
      */
     public static function performFloodCheck($action) {
 
-        if (config::getMainIni('debug')) {
+        if (conf::getMainIni('debug')) {
             self::$log = true;
         }
                 
@@ -189,7 +189,7 @@ class flood {
         // check if the static sections[$action] is set
         if (!isset($sections[$action])) {
             $section = "flood_$action";
-            $ini = config::getModuleIni($section);
+            $ini = conf::getModuleIni($section);
             $sections[$action] = $ini;
         }
         return $sections[$action];
