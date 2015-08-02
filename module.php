@@ -1,5 +1,15 @@
 <?php
 
+use diversen\conf;
+use diversen\date;
+use diversen\db;
+use diversen\html;
+use diversen\http;
+use diversen\lang;
+use diversen\log;
+use diversen\session;
+use diversen\time;
+
 /**
  * @package flood
  */
@@ -14,6 +24,11 @@ class flood {
     
     public static $table = 'flood';
     public static $log = null;
+    
+    public function indexAction () {
+        $action = htmlspecialchars($_GET['action']);
+        echo flood::getFloodedMessage($action);
+    }
     
     /**
      * method for checking if something if being flooded with events,
