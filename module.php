@@ -258,37 +258,37 @@ class flood {
         $str = '';
         $time_to_next_post = $post_next - time();
         if ($time_to_next_post < 0) {
-            $str.= html::getHeadline(lang::translate('flood: You can post agian'));
-            $str.= lang::translate('flood: You should be able to post');
+            $str.= html::getHeadline(lang::translate('You can post again'));
+            $str.= lang::translate('You should be able to post');
             return $str;
         }
 
         $res = time::getSecsDivided($time_to_next_post);
-        $str.= html::getHeadline(lang::translate('flood:: exceed time limit title'));
+        $str.= html::getHeadline(lang::translate('Exceed time limit title'));
         $res_int = time::getSecsDivided($interval);
 
-        $str.= lang::translate('flood: Max Amount of posts is');
+        $str.= lang::translate('Max Amount of posts is ');
         $str.= $max_posts;
-        $str.= lang::translate('flood: per');
+        $str.= lang::translate(' per ');
 
         $str.= $res_int['days'];
-        $str.= lang::translate('flood: days and');
+        $str.= lang::translate(' days and ');
         $str.= $res_int['hours'];
-        $str.= lang::translate('flood: hours and');
+        $str.= lang::translate(' hours and ');
         $str.= $res_int['minutes'];
-        $str.= lang::translate('flood: minutes and');
+        $str.= lang::translate(' minutes and  ');
         $str.= $res_int['seconds'];
-        $str.= lang::translate('flood: seconds');
+        $str.= lang::translate(' seconds ');
 
         $str.= "<br />\n";
 
-        $str.= lang::translate('flood: Your post counter will be reset in');
+        $str.= lang::translate('Your post counter will be reset in ');
         $str.= $res['hours'];
-        $str.= lang::translate('flood: hours and');
+        $str.= lang::translate(' hours and ');
         $str.= $res['minutes'];
-        $str.= lang::translate('flood: minutes and');
+        $str.= lang::translate(' minutes and ');
         $str.= $res['seconds'];
-        $str.= lang::translate('flood: seconds');
+        $str.= lang::translate(' seconds ');
         return $str;
     }
     
@@ -307,38 +307,34 @@ class flood {
 
         $str = '';
         $time_to_next_post = $post_next - time();
-        if ($time_to_next_post < 0) {
-            //$str.= html::getHeadline(lang::translate('flood: You can post agian'));
-            //$str.= lang::translate('flood: You should be able to post');
-            //return $str;
-        }
+
 
         $res = time::getSecsDivided($time_to_next_post);
-        //$str.= html::getHeadline(lang::translate('flood:: exceed time limit title'));
+
         $res_int = time::getSecsDivided($interval);
 
-        $str.= lang::translate('flood: Max Amount of posts is');
+        $str.= lang::translate('Max Amount of posts is ');
         $str.= $max_posts;
-        $str.= lang::translate('flood: per');
+        $str.= lang::translate(' per ');
 
         $str.= $res_int['days'];
-        $str.= lang::translate('flood: days and');
+        $str.= lang::translate(' days and ');
         $str.= $res_int['hours'];
-        $str.= lang::translate('flood: hours and');
+        $str.= lang::translate(' hours and ');
         $str.= $res_int['minutes'];
-        $str.= lang::translate('flood: minutes and');
+        $str.= lang::translate(' minutes and ');
         $str.= $res_int['seconds'];
-        $str.= lang::translate('flood: seconds');
+        $str.= lang::translate(' seconds. ');
 
-        //$str.= "<br />\n";
+        $str.= "<br />\n";
 
-        $str.= lang::translate('flood: Your post counter will be reset in');
+        $str.= lang::translate('Your post counter will be reset in ');
         $str.= $res['hours'];
-        $str.= lang::translate('flood: hours and');
+        $str.= lang::translate(' hours and ');
         $str.= $res['minutes'];
-        $str.= lang::translate('flood: minutes and');
+        $str.= lang::translate(' minutes and ');
         $str.= $res['seconds'];
-        $str.= lang::translate('flood: seconds');
+        $str.= lang::translate(' seconds ');
         return $str;
     }
 }
