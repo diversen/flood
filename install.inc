@@ -6,7 +6,7 @@
 // If we wanted to update our SQL at a later point
 // we will add a fill to the 'up' dir where we place a
 // e.g. 1.02.sql file and update $_INSTALL['VERSION] as well.
-$_INSTALL['VERSION'] = 3.01;
+$_INSTALL['VERSION'] = 4.01;
 
 // This sets the public clone URL
 $_INSTALL['PUBLIC_CLONE_URL'] = "git://github.com/diversen/flood.git";
