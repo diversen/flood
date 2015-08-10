@@ -267,28 +267,28 @@ class flood {
         $str.= html::getHeadline(lang::translate('Exceed time limit title'));
         $res_int = time::getSecsDivided($interval);
 
-        $str.= lang::translate('Max Amount of posts is ');
+        $str.= lang::translate('Max Amount of posts is') . ' ';
         $str.= $max_posts;
-        $str.= lang::translate(' per ');
+        $str.= lang::translate('per') . ' ';
 
-        $str.= $res_int['days'];
-        $str.= lang::translate(' days and ');
-        $str.= $res_int['hours'];
-        $str.= lang::translate(' hours and ');
-        $str.= $res_int['minutes'];
-        $str.= lang::translate(' minutes and  ');
-        $str.= $res_int['seconds'];
-        $str.= lang::translate(' seconds ');
+        $str.= $res_int['days'] . ' ';
+        $str.= lang::translate('days and') . ' ';
+        $str.= $res_int['hours'] . ' ';
+        $str.= lang::translate(' hours and') . ' ';
+        $str.= $res_int['minutes'] . ' ';
+        $str.= lang::translate('minutes and') . ' ';
+        $str.= $res_int['seconds'] . ' ';
+        $str.= lang::translate('seconds') . ' ';
 
         $str.= "<br />\n";
 
-        $str.= lang::translate('Your post counter will be reset in ');
-        $str.= $res['hours'];
-        $str.= lang::translate(' hours and ');
-        $str.= $res['minutes'];
-        $str.= lang::translate(' minutes and ');
-        $str.= $res['seconds'];
-        $str.= lang::translate(' seconds ');
+        $str.= lang::translate('Your post counter will be reset in') . ' ';
+        $str.= $res['hours'] . ' ';
+        $str.= lang::translate('hours and') . ' ';
+        $str.= $res['minutes'] . ' ';
+        $str.= lang::translate('minutes and') . ' ';
+        $str.= $res['seconds'] . ' ';
+        $str.= lang::translate('seconds') . ' ';
         return $str;
     }
     
@@ -308,33 +308,31 @@ class flood {
         $str = '';
         $time_to_next_post = $post_next - time();
 
-
         $res = time::getSecsDivided($time_to_next_post);
-
         $res_int = time::getSecsDivided($interval);
 
-        $str.= lang::translate('Max Amount of posts is ');
-        $str.= $max_posts;
-        $str.= lang::translate(' per ');
+        $str.= lang::translate('Max Amount of posts is') . ' ';
+        $str.= $max_posts . ' ';
+        $str.= lang::translate('per') . ' ';
 
-        $str.= $res_int['days'];
-        $str.= lang::translate(' days and ');
-        $str.= $res_int['hours'];
-        $str.= lang::translate(' hours and ');
-        $str.= $res_int['minutes'];
-        $str.= lang::translate(' minutes and ');
-        $str.= $res_int['seconds'];
-        $str.= lang::translate(' seconds. ');
+        $str.= $res_int['days'] . ' ';
+        $str.= lang::translate('days and') . ' ';
+        $str.= $res_int['hours'] . ' ';
+        $str.= lang::translate('hours and') . ' ';
+        $str.= $res_int['minutes'] . ' ';
+        $str.= lang::translate('minutes and') . ' ';
+        $str.= $res_int['seconds'] . ' ';
+        $str.= lang::translate('seconds.') . ' ';
 
         $str.= "<br />\n";
 
-        $str.= lang::translate('Your post counter will be reset in ');
-        $str.= $res['hours'];
-        $str.= lang::translate(' hours and ');
-        $str.= $res['minutes'];
-        $str.= lang::translate(' minutes and ');
-        $str.= $res['seconds'];
-        $str.= lang::translate(' seconds ');
+        $str.= lang::translate('Your post counter will be reset in') . ' ';
+        $str.= $res['hours'] . ' ';
+        $str.= lang::translate('hours and') . ' ';
+        $str.= $res['minutes'] . ' ';
+        $str.= lang::translate('minutes and') . ' ';
+        $str.= $res['seconds'] . ' ';
+        $str.= lang::translate('seconds') . ' ';
         return $str;
     }
 }
