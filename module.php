@@ -268,7 +268,7 @@ class flood {
         $res_int = time::getSecsDivided($interval);
 
         $str.= lang::translate('Max Amount of posts is') . ' ';
-        $str.= $max_posts;
+        $str.= $max_posts . ' ';
         $str.= lang::translate('per') . ' ';
 
         $str.= $res_int['days'] . ' ';
