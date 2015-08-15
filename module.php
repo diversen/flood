@@ -1,5 +1,6 @@
 <?php
 
+namespace modules\flood;
 use diversen\conf;
 use diversen\date;
 use diversen\db;
@@ -9,6 +10,7 @@ use diversen\lang;
 use diversen\log;
 use diversen\session;
 use diversen\time;
+use diversen\moduleloader;
 
 /**
  * @package flood
@@ -20,14 +22,18 @@ use diversen\time;
  * @package flood
  */
 
-class flood {
+class module {
     
     public static $table = 'flood';
     public static $log = null;
     
+    public function __construct() {
+        moduleloader::includeModule('flood');
+    }
+    
     public function indexAction () {
         $action = htmlspecialchars($_GET['action']);
-        echo flood::getFloodedMessage($action);
+        echo self::getFloodedMessage($action);
     }
     
     /**
@@ -72,11 +78,9 @@ class flood {
             return true;
         }
 
-        $row = self::getUserRow($action);
-        
+        $row = self::getUserRow($action);      
         $post_max = $ini['post_max'];
 
-        
         if (empty($row)) {
             self::insertFirstRow($action);
             return true;
@@ -162,6 +166,7 @@ class flood {
         $values = array ();
         $values['user_id'] = session::getUserId();
         $values['reference'] = $action;
+        $values['updated'] = date('Y-m-d H:i:s');
         $values['posts'] = 1;
         return $db->insert(self::$table, $values);
     }
@@ -243,13 +248,13 @@ class flood {
     
     public static function getFloodedMessage($action) {
         
-        $row = flood::getUserRow($action);
+        $row = self::getUserRow($action);
         if (empty($row)) {
             $row = array ();
             $row['updated'] = date::getDateNow();
         }
         
-        $ini = flood::getIniSection($action);
+        $ini = self::getIniSection($action);
         $max_posts = $ini['post_max'];
 
         $interval = $ini['post_interval'];
@@ -264,7 +269,7 @@ class flood {
         }
 
         $res = time::getSecsDivided($time_to_next_post);
-        $str.= html::getHeadline(lang::translate('Exceed time limit title'));
+        $str.= html::getHeadline(lang::translate('Exceed post limit'));
         $res_int = time::getSecsDivided($interval);
 
         $str.= lang::translate('Max Amount of posts is') . ' ';
@@ -293,13 +298,13 @@ class flood {
     }
     
     public static function getFloodedMessageSimple($action) {
-        $row = flood::getUserRow($action);
+        $row = self::getUserRow($action);
         if (empty($row)) {
             $row = array ();
             $row['updated'] = date::getDateNow();
         }
         
-        $ini = flood::getIniSection($action);
+        $ini = self::getIniSection($action);
         $max_posts = $ini['post_max'];
 
         $interval = $ini['post_interval'];
@@ -336,5 +341,3 @@ class flood {
         return $str;
     }
 }
-
-class flood_module extends flood {}
