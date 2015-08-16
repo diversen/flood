@@ -6,7 +6,7 @@ $LANG = array();
 
 $LANG['You can post again'] = 'You can post again';
 $LANG['You should be able to post'] = 'You should be able to post';
-$LANG['Exceed time limit title'] = 'Exceed time limit title';
+$LANG['Exceed post limit'] = 'Exceed post limit';
 $LANG['Max Amount of posts is'] = 'Max Amount of posts is';
 $LANG['per'] = 'per';
 $LANG['days and'] = 'days and';
