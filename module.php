@@ -67,10 +67,6 @@ class module {
      * @return boolean $res true on success else failure
      */
     public static function performFloodCheck($action) {
-
-        if (conf::getMainIni('debug')) {
-            self::$log = true;
-        }
                 
         // check if it is something we are configured to do
         $ini = self::getIniSection($action);
@@ -87,7 +83,7 @@ class module {
         } else {
             
             // Exceed max posts            
-            if ($row['posts'] >= $post_max) {
+            if ($row['posts'] > $post_max) {
                 if (self::exceedsInterval($action, $row['updated'])) {             
                     return false;
                 } else {
