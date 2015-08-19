@@ -4,7 +4,7 @@ $LANG = array();
 
 $LANG['You can post again'] = 'Du kan skrive igen';
 $LANG['You should be able to post'] = 'Du bør være i stand til at sende';
-$LANG['Exceed time limit title'] = 'Exceed frist titel';
+$LANG['Exceed post limit'] = 'Exceed indlæg grænse';
 $LANG['Max Amount of posts is'] = 'Max Mængde indlæg er';
 $LANG['per'] = 'om';
 $LANG['days and'] = 'dage og';
